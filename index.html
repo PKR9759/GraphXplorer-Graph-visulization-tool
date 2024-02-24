@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Graph Visualizer</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Visualizer</title>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -32,70 +32,10 @@
       </defs>
     </svg>
 
-    <!-- Modal for edge weight input -->
-    <div id="edgeWeightModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <p>Enter the weight of the edge:</p>
-        <input type="text" id="edgeWeightInput">
-        <button id="edgeWeightSubmit">Submit</button>
-      </div>
     </div>
 
 
-
-  </div>
-
-
-  <script src="graph-construct.js"></script>
-  <script>
-
-    // document.addEventListener("DOMContentLoaded", function () {
-      var graphTypeSelect = document.getElementById("graph-type");
-      var edgeButton = document.getElementById("edgeBtn");
-
-      graphTypeSelect.addEventListener("change", function (event) {
-        var selectedValue = graphTypeSelect.value;
-
-        switch (selectedValue) {
-          case "DWG":
-            console.log("Directed Weighted Graph selected");
-            break;
-          case "DUG":
-            console.log("Directed Unweighted Graph selected");
-            break;
-          case "UWG":
-            console.log("Undirected Weighted Graph selected");
-            edgeButton.addEventListener("click", function () {
-              // Show the edge weight modal
-              document.getElementById("edgeWeightModal").style.display = "block";
-            });
-            break;
-          case "UUG":
-            console.log("Undirected Unweighted Graph selected");
-            break;
-          default:
-            console.log("Unknown graph type selected");
-        }
-      });
-
-      // Close the modal when the close button is clicked
-      document.getElementsByClassName("close")[0].addEventListener("click", function () {
-        document.getElementById("edgeWeightModal").style.display = "none";
-      });
-
-      // Submit the edge weight when the submit button is clicked
-      document.getElementById("edgeWeightSubmit").addEventListener("click", function () {
-        var edgeWeight = document.getElementById("edgeWeightInput").value;
-        if (edgeWeight) {
-          console.log("Edge weight entered:", edgeWeight);
-          // Add your code here to handle the edge weight
-          // For example, you can close the modal after processing the weight
-          document.getElementById("edgeWeightModal").style.display = "none";
-        }
-      });
-    // });
-  </script>
+    <script src="graph-construct.js"></script>
 </body>
 
 </html>
