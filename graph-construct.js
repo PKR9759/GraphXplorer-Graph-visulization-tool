@@ -12,6 +12,10 @@ let isAddingEdge = false;
 let isPerformingBFS = false;
 let selectedVertex = null;
 let graph = {};
+let dwg = false;
+let dug = false;
+let uwg = false;
+let uug = true;
 const locationOfVerticies = {}
 
 // Function to handle click event for adding a vertex
@@ -65,92 +69,39 @@ function addVertex(event) {
     graphSvg.appendChild(text);
 }
 
-// Function to handle click event for adding an edge
-function addUndirectedWeightedEdge(event) {
-    if (!isAddingEdge) return;
 
-    const svgRect = graphSvg.getBoundingClientRect();
-    const xPos = event.clientX - svgRect.left;
-    const yPos = event.clientY - svgRect.top;
+function addWeight(midX, midY) {
+    var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", `${midX - 10}`);
+    rect.setAttribute("y", `${midY - 10}`);
+    rect.setAttribute("width", 20);
+    rect.setAttribute("height", 20);
+    rect.setAttribute("fill", "lightblue");
 
-    // Find the vertex closest to the click position
-    let closestVertex = vertices.reduce((closest, vertex) => {
-        const distance = Math.sqrt(Math.pow(xPos - vertex.x, 2) + Math.pow(yPos - vertex.y, 2));
-        if (distance < closest.distance) {
-            return { vertex, distance };
+    // Create text element
+    var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", midX); // Adjusted to center the text horizontally
+    text.setAttribute("y", midY); // Adjusted to center the text vertically
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute('dominant-baseline', 'central');
+    text.setAttribute("fill", "black");
+    // let's show pop up for the edge weith
+    document.getElementById("edgeWeightModal").style.display = "block";
+    document.getElementById("edgeWeightSubmit").addEventListener("click", function () {
+        var edgeWeight = document.getElementById("edgeWeightInput").value;
+        if (edgeWeight) {
+            console.log("Edge weight entered:", edgeWeight);
+            // Add your code here to handle the edge weight
+            // For example, you can close the modal after processing the weight
+            document.getElementById("edgeWeightModal").style.display = "none";
+            text.textContent = edgeWeight;
         }
-        return closest;
-    }, { vertex: null, distance: Infinity }).vertex;
+    });
 
-    // If a vertex is found and it's not the same as the selected vertex, create an edge
-    if (closestVertex) {
-        if (!selectedVertex) {
-            selectedVertex = closestVertex;
-        } else if (selectedVertex !== closestVertex) {
-
-            const edge = {
-                start: selectedVertex,
-                end: closestVertex,
-                id: edges.length + 1
-            };
-
-            graph[selectedVertex.id].push(closestVertex.id);
-            graph[closestVertex.id].push(selectedVertex.id);
-
-            edges.push(edge);
-            console.log(edges);
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('d', `M${selectedVertex.x},${selectedVertex.y} L${closestVertex.x},${closestVertex.y}`);
-            let midX = (selectedVertex.x + closestVertex.x) / 2;
-            let midY = (selectedVertex.y + closestVertex.y) / 2;
-
-            // path.setAttribute('x1', `${selectedVertex.x}`);
-            // path.setAttribute('y1', `${selectedVertex.y}`);
-            // path.setAttribute('x2', `${closestVertex.x}`);
-            // path.setAttribute('y2', `${closestVertex.y}`);
-            path.setAttribute('stroke', '#2C3A47');
-            path.setAttribute('stroke-width', '1.5');
-            path.setAttribute('id', `edge-${edges.length}`);
-            path.setAttribute('stroke-miterlimit', '10');
-            path.setAttribute('fill', 'none');
-
-            // const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            // text.setAttribute('x', midX);
-            // text.setAttribute('y', `${midY + 8}`);
-            // text.setAttribute('text-anchor', 'middle');
-            // text.setAttribute('dominant-baseline', 'central');
-            // text.setAttribute('fill', 'black');
-            // text.setAttribute('font-size', '16');
-            // text.textContent = `${6}`;
-            // graphSvg.appendChild(text);
-            // Append the edge path before vertices to ensure it appears below them
-            graphSvg.insertBefore(path, graphSvg.firstChild);
-
-            var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            rect.setAttribute("x", `${midX - 10}`);
-            rect.setAttribute("y", `${midY - 10}`);
-            rect.setAttribute("width", 20);
-            rect.setAttribute("height", 20);
-            rect.setAttribute("fill", "lightblue");
-
-            // Create text element
-            var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            text.setAttribute("x", midX); // Adjusted to center the text horizontally
-            text.setAttribute("y", midY); // Adjusted to center the text vertically
-            text.setAttribute("text-anchor", "middle");
-            text.setAttribute('dominant-baseline', 'central');
-            text.setAttribute("fill", "black");
-            text.textContent = "6";
-
-            // Append rectangle and text elements to SVG
-            graphSvg.appendChild(rect);
-            graphSvg.appendChild(text);
-
-            selectedVertex = null;
-        }
-    }
+    // Append rectangle and text elements to SVG
+    graphSvg.appendChild(rect);
+    graphSvg.appendChild(text);
 }
-
 // Function to handle click event for adding an edge
 function addEdge(event) {
     if (!isAddingEdge) return;
@@ -187,10 +138,7 @@ function addEdge(event) {
             console.log(edges);
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             path.setAttribute('d', `M${selectedVertex.x},${selectedVertex.y} L${closestVertex.x},${closestVertex.y}`);
-            // path.setAttribute('x1', `${selectedVertex.x}`);
-            // path.setAttribute('y1', `${selectedVertex.y}`);
-            // path.setAttribute('x2', `${closestVertex.x}`);
-            // path.setAttribute('y2', `${closestVertex.y}`);
+
             path.setAttribute('stroke', '#2C3A47');
             path.setAttribute('stroke-width', '1.5');
             path.setAttribute('id', `edge-${edges.length}`);
@@ -198,6 +146,13 @@ function addEdge(event) {
             path.setAttribute('fill', 'none');
             // Append the edge path before vertices to ensure it appears below them
             graphSvg.insertBefore(path, graphSvg.firstChild);
+
+            if (uwg) {
+                let midX = (selectedVertex.x + closestVertex.x) / 2;
+                let midY = (selectedVertex.y + closestVertex.y) / 2;
+
+                addWeight(midX, midY);
+            }
 
             selectedVertex = null;
         }
@@ -259,26 +214,18 @@ function addDirectedEdge(event) {
                 path.setAttribute('id', `edge-${edges.length}`);
                 path.setAttribute('fill', 'none');
 
-
-
-                // graphSvg.insertBefore(arrowLine,graphSvg.firstChild);
-                // Append the edge path before vertices to ensure it appears below them
-
                 let len = path.getTotalLength();
 
                 let point = path.getPointAtLength(len - 33);
                 direction = `M${selectedVertex.x},${selectedVertex.y} L${point.x},${point.y}`;
                 path.setAttribute('d', direction);
                 graphSvg.insertBefore(path, graphSvg.firstChild);
-                // var arrowLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                // arrowLine.setAttribute('x1', `${selectedVertex.x}`);
-                // arrowLine.setAttribute('y1', `${selectedVertex.y}`);
-                // arrowLine.setAttribute('x2',`${point.x}` );
-                // arrowLine.setAttribute('y2', `${point.y}`);
-                // arrowLine.setAttribute('stroke', 'none');
-                // arrowLine.setAttribute('marker-end', 'url(#arrowhead)');
 
-                // graphSvg.insertBefore(arrowLine,graphSvg.firstChild);
+                if (dwg) {
+                    let midX = (selectedVertex.x + point.x) / 2;
+                    let midY = (selectedVertex.y + point.y) / 2;
+                    addWeight(midX, midY);
+                }
 
             }
 
@@ -289,10 +236,7 @@ function addDirectedEdge(event) {
 
 
 var graphTypeSelect = document.getElementById("graph-type");
-let dbg = false;
-let dug = false;
-let uwg = false;
-let uug = true;
+
 // Add event listener for change event
 graphTypeSelect.addEventListener("change", function (event) {
     // Get the selected value
@@ -303,7 +247,7 @@ graphTypeSelect.addEventListener("change", function (event) {
         case "DWG":
 
             // Directed Weighted Graph
-            dbg = true;
+            dwg = true;
             dug = false;
             uwg = false;
             uug = false;
@@ -311,7 +255,7 @@ graphTypeSelect.addEventListener("change", function (event) {
             // Add your code here for Directed Weighted Graph
             break;
         case "DUG":
-            dbg = false;
+            dwg = false;
             dug = true;
             uwg = false;
             uug = false;
@@ -321,7 +265,7 @@ graphTypeSelect.addEventListener("change", function (event) {
             break;
         case "UWG":
             // Undirected Weighted Graph
-            dbg = false;
+            dwg = false;
             dug = false;
             uwg = true;
             uug = false;
@@ -330,7 +274,7 @@ graphTypeSelect.addEventListener("change", function (event) {
             break;
         case "UUG":
             // Undirected Unweighted Graph
-            dbg = false;
+            dwg = false;
             dug = false;
             uwg = false;
             uug = true;
@@ -364,7 +308,10 @@ edgeBtn.addEventListener('click', () => {
     else if (dug) {
         graphSvg.addEventListener('click', addDirectedEdge);
     } else if (uwg) {
-        graphSvg.addEventListener('click', addUndirectedWeightedEdge);
+        graphSvg.addEventListener('click', addEdge);
+    } else {
+        graphSvg.addEventListener('click', addDirectedEdge);
+
     }
 });
 
