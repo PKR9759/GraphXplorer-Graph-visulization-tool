@@ -204,13 +204,43 @@ function addDirectedEdge(event) {
                 const arrowX = selectedVertex.x + dx * edgeRatio;
                 const arrowY = selectedVertex.y + dy * edgeRatio;
 
+
+                // Adding arrow
+
+                // Create <defs> element
+                var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+
+                // Create <marker> element
+                var marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+                marker.setAttribute("id", `arrow-${edges.length}`);
+                marker.setAttribute("markerWidth", "10");
+                marker.setAttribute("markerHeight", "7");
+                marker.setAttribute("refX", "0");
+                marker.setAttribute("refY", "3.5");
+                marker.setAttribute("orient", "auto");
+
+                // Create <polygon> element
+                var polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                polygon.setAttribute("points", "0 0, 10 3.5, 0 7");
+                polygon.setAttribute("fill", "black");
+
+                // Append <polygon> to <marker>
+                marker.appendChild(polygon);
+
+                // Append <marker> to <defs>
+                defs.appendChild(marker);
+
+                // Append <defs> to the SVG container
+                // Replace 'svg-container' with the ID of your SVG container
+                graphSvg.appendChild(defs);
+
                 // Draw the directed edge with arrowhead
                 const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 let direction = `M${selectedVertex.x},${selectedVertex.y} L${closestVertex.x},${closestVertex.y}`;
                 path.setAttribute('d', direction);
                 path.setAttribute('stroke', '#2C3A47');
                 path.setAttribute('stroke-width', '1.5');
-                path.setAttribute('marker-end', 'url(#arrowhead)'); // Add marker to indicate direction
+                path.setAttribute('marker-end', `url(#arrow-${edges.length})`); // Add marker to indicate direction
                 path.setAttribute('id', `edge-${edges.length}`);
                 path.setAttribute('fill', 'none');
 
@@ -221,11 +251,15 @@ function addDirectedEdge(event) {
                 path.setAttribute('d', direction);
                 graphSvg.insertBefore(path, graphSvg.firstChild);
 
+
+
                 if (dwg) {
                     let midX = (selectedVertex.x + point.x) / 2;
                     let midY = (selectedVertex.y + point.y) / 2;
                     addWeight(midX, midY);
                 }
+
+
 
             }
 
@@ -322,8 +356,11 @@ bfsBtn.addEventListener('click', () => {
     isAddingEdge = false;
     graphSvg.removeEventListener('click', addVertex);
     graphSvg.removeEventListener('click', addDirectedEdge);
+    graphSvg.removeEventListener('click',addEdge);
 
-    const startingNode = vertices[0].id; // Or use the ID to access by vertex ID
-    bfs(graph, startingNode);
+    // const startingNode = vertices[0].id; // Or use the ID to access by vertex ID
+
+    // bfs(graph, startingNode);
+    graphSvg.addEventListener('click',triggerBfs);
 
 });
