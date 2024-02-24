@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graph Visualizer</title>
-    <link rel="stylesheet" href="style.css">
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Graph Visualizer</title>
+      <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -32,9 +32,23 @@
       </defs>
     </svg>
 
-    </div>
+        <!-- Modal for edge weight input -->
+        <div id="edgeWeightModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Enter the weight of the edge:</p>
+                <input type="text" id="edgeWeightInput">
+                <button id="edgeWeightSubmit">Submit</button>
+            </div>
+        </div>
 
 
+
+      </div>
+
+
+    <script src="graph-construct.js"></script>
+    <script src="BFS.js"></script>
     <script src="graph-construct.js"></script>
 </body>
 
