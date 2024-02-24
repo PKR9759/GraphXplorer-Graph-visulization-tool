@@ -154,6 +154,13 @@ function addEdge(event) {
                 addWeight(midX, midY);
             }
 
+            if (uwg) {
+                let midX = (selectedVertex.x + closestVertex.x) / 2;
+                let midY = (selectedVertex.y + closestVertex.y) / 2;
+
+                addWeight(midX, midY);
+            }
+
             selectedVertex = null;
         }
     }
