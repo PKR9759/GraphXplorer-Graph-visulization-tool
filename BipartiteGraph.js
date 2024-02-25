@@ -1,5 +1,5 @@
 const bipartiteBtn = document.getElementById("bipartiteBtn");
-
+// let stepDuration2;
 
 bipartiteBtn.onclick = async function () {
     const isBipartite = await checkBipartite(1);//beacuse start node is 1
@@ -46,13 +46,13 @@ async function checkBipartite(startNode) {
         for (const adjNode of graph[currentNode]) {
             if (!vertexColors[adjNode]) {
                 visited[currentNode] = true;
-                
+
                 // Trigger animation for visiting an edge
-                
-                showBetterAnimation(currentNode, adjNode);
-                
-                
-                await new Promise(resolve => setTimeout(resolve, 4580));
+
+                showEdgeAnimation(currentNode, adjNode);
+                await new Promise(resolve => {
+                    setTimeout(resolve, 4580);
+                });
                 // Change the color of the adjacent vertex
                 changeVertexColor(adjNode, vertexColors[currentNode] === 'red' ? 'blue' : 'red');
 
@@ -62,17 +62,17 @@ async function checkBipartite(startNode) {
 
                 // Sleep to simulate asynchronous behavior
                 // Adjust the delay as needed
-                
+
 
             } else if (vertexColors[adjNode] === vertexColors[currentNode]) {
                 // If adjacent nodes have the same color, the graph is not bipartite
-                
+
                 return false;
             }
         }
     }
 
-    
+
     return true;
 }
 
@@ -87,7 +87,7 @@ function changeVertexColor(vertexId, color) {
 
 
 function displayTypedMessage(message) {
-    
+
     const styledMessage = document.getElementById('typed-message');
     styledMessage.style.display = 'block';
 
@@ -98,15 +98,103 @@ function displayTypedMessage(message) {
         backSpeed: 25,
         showCursor: true,
         cursorChar: '|',
-        onComplete: function() {
+        onComplete: function () {
             setTimeout(() => {
                 styledMessage.style.display = 'none';
                 typed.destroy();
-            }, 1200);
+            }, 1500);
             // Remove the typed instance after completion
-            
-            
-            
+
+
+
         }
     });
 }
+
+
+
+function showEdgeAnimation(currentNode, adjNode) {
+    let edgeId;
+    let currEdge = null;
+    for (let edge of edges) {
+        if ((edge.start.id == currentNode && edge.end.id == adjNode) || (edge.start.id == adjNode && edge.end.id == currentNode)) {
+            edgeId = edge.id;
+            currEdge = edge;
+        }
+    }
+
+    const edgeElement = document.getElementById(`edge-${edgeId}`);
+    const arrow = document.querySelector(`#arrow-${edgeId} polygon`);
+    if (edgeElement) {
+
+        const totalLength = edgeElement.getTotalLength();
+
+        const overlayLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+
+        overlayLine.setAttribute('stroke', 'green');
+        overlayLine.setAttribute('stroke-width', '5');
+
+        let flag = false;
+        if (currEdge.start.id != currentNode) {
+            flag = true;
+            [currEdge.start, currEdge.end] = [currEdge.end, currEdge.start]
+        }
+        overlayLine.setAttribute('x1', currEdge.start.x);
+        overlayLine.setAttribute('y1', currEdge.start.y);
+        overlayLine.setAttribute('x2', currEdge.start.x); // Initialize x2 to match the original line's starting point
+        overlayLine.setAttribute('y2', currEdge.start.y); // Initialize y2 to match the original line's starting point
+        // Append the edge overlayLine before vertices to ensure it appears below them
+        graphSvg.insertBefore(overlayLine, graphSvg.firstChild);
+
+        // Animate the overlay line
+        let currentLength = 0;
+        const animationDuration = 4500; // Animation duration in milliseconds
+        const animationSteps = 100; // Number of steps
+        const stepLength = totalLength / animationSteps; // Length of each step
+        const stepDuration = animationDuration / animationSteps; // Duration for each step
+
+        return new Promise(resolve => {
+            function animateOverlayLine() {
+                currentLength += stepLength;
+                let point = edgeElement.getPointAtLength(currentLength);
+                if (flag) {
+                    point = edgeElement.getPointAtLength(totalLength - currentLength);
+
+                }
+                overlayLine.setAttribute('x2', point.x);
+                overlayLine.setAttribute('y2', point.y);
+
+
+
+                // Set the stroke color based on the current length
+                const percent = currentLength / totalLength;
+                const red = 255 * percent;
+                const green = 255 - (255 * percent);
+                overlayLine.setAttribute('stroke', `rgb(${red}, ${green}, 0)`);
+
+
+                if (currentLength < totalLength) {
+                    setTimeout(animateOverlayLine, stepDuration);
+                    stepDuration2= stepDuration;
+                } else {
+                    edgeElement.setAttribute('stroke', 'green');
+                    if (arrow)
+                        arrow.setAttribute('fill', 'green');
+                    // edgeElement.setAttribute('stroke-width', '5');
+                    graphSvg.removeChild(overlayLine);
+                    let adjNodeElement = document.getElementById(`circle-${adjNode}`)
+                    adjNodeElement.setAttribute('fill', 'green');
+                    resolve(); // Resolve the promise when the animation is complete
+                }
+            
+            }
+            // Start the animation
+            animateOverlayLine();
+        });
+    }
+}
+
+
+
+
