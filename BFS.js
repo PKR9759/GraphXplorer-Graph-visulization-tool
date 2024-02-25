@@ -14,6 +14,12 @@ function formatSVG() {
     for (vertex of vertices) {
         let id = vertex.id;
         let node = document.getElementById(`circle-${id}`);
+        let dfn = document.getElementById(`dfn-${id}`);
+        if(dfn)
+        {
+            graphSvg.removeChild(dfn);
+            count = 1;
+        }
         if (node) {
             node.setAttribute('fill', '#3B3B98');
         }
@@ -99,15 +105,19 @@ function showAnimation(currentNode, adjNode) {
 
 }
 
+function markAsStartedNode(startNode)
+{
+    let node = document.getElementById(`circle-${startNode}`);
+    node.setAttribute('fill', '#006266');
+    console.log(graph);
+}
 
 async function bfs(graph, startNode) {
     if(isBFS) return;
     isBFS = true;
     formatSVG();
 
-    let node = document.getElementById(`circle-${startNode}`);
-    node.setAttribute('fill', '#006266');
-    console.log(graph);
+    markAsStartedNode(startNode);
     // Use a queue to store nodes to be explored
     const queue = [startNode];
     // Keep track of visited nodes to avoid revisiting

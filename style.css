@@ -75,3 +75,7 @@ svg {
     text-decoration: none;
     cursor: pointer;
 }
+
+text,circle{
+    cursor: pointer;
+}

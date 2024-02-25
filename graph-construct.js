@@ -89,7 +89,7 @@ function addWeight(midX, midY) {
     text.setAttribute("text-anchor", "middle");
     text.setAttribute('dominant-baseline', 'central');
     text.setAttribute("fill", "black");
-    text.setAttribute('id',`text-${edges.length}`);
+    text.setAttribute('id', `text-${edges.length}`);
     text.textContent = 1;
     graphSvg.appendChild(rect);
     graphSvg.appendChild(text);
@@ -111,7 +111,7 @@ function addWeight(midX, midY) {
     // text.textContent = edgeWeight;
 
     // Append rectangle and text elements to SVG
-   
+
 }
 // Function to handle click event for adding an edge
 function addEdge(event) {
@@ -304,7 +304,7 @@ graphTypeSelect.addEventListener("change", function (event) {
             uwg = false;
             uug = false;
             console.log("Directed Weighted Graph selected");
-            // Add your code here for Directed Weighted Graph
+            
             break;
         case "DUG":
             dwg = false;
@@ -313,7 +313,7 @@ graphTypeSelect.addEventListener("change", function (event) {
             uug = false;
             // Directed Unweighted Graph
             console.log("Directed Unweighted Graph selected");
-            // Add your code here for Directed Unweighted Graph
+           
             break;
         case "UWG":
             // Undirected Weighted Graph
@@ -322,7 +322,7 @@ graphTypeSelect.addEventListener("change", function (event) {
             uwg = true;
             uug = false;
             console.log("Undirected Weighted Graph selected");
-            // Add your code here for Undirected Weighted Graph
+            
             break;
         case "UUG":
             // Undirected Unweighted Graph
@@ -331,7 +331,6 @@ graphTypeSelect.addEventListener("change", function (event) {
             uwg = false;
             uug = true;
             console.log("Undirected Unweighted Graph selected");
-            // Add your code here for Undirected Unweighted Graph
             break;
         default:
             console.log("Unknown graph type selected");
@@ -374,17 +373,25 @@ bfsBtn.addEventListener('click', () => {
     isAddingEdge = false;
     graphSvg.removeEventListener('click', addVertex);
     graphSvg.removeEventListener('click', addDirectedEdge);
-    graphSvg.removeEventListener('click',addEdge);
+    graphSvg.removeEventListener('click', addEdge);
+    graphSvg.removeEventListener('click',triggerDfs);
 
     // const startingNode = vertices[0].id; // Or use the ID to access by vertex ID
 
     // bfs(graph, startingNode);
     // isBFS = true;
-    graphSvg.addEventListener('click',triggerBfs);
+    graphSvg.addEventListener('click', triggerBfs);
     // graphSvg.removeEventListener('click',triggerBfs);
 
 });
 
-dfsBtn.addEventListener('click',()=>{
-    graphSvg.addEventListener('click',triggerDfs);
+dfsBtn.addEventListener('click', () => {
+    isPerformingBFS = true;
+    isAddingVertex = false;
+    isAddingEdge = false;
+    graphSvg.removeEventListener('click', addVertex);
+    graphSvg.removeEventListener('click', addDirectedEdge);
+    graphSvg.removeEventListener('click', addEdge);
+    graphSvg.removeEventListener('click',triggerBfs);
+    graphSvg.addEventListener('click', triggerDfs);
 })
