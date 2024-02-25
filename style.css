@@ -79,3 +79,20 @@ svg {
 text,circle{
     cursor: pointer;
 }
+#typed-message {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    color: #fff; /* Text color */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); /* Box shadow for the overlay message */
+    text-align: center;
+    font-size: 24px;
+    max-width: 80%; /* Maximum width of the message */
+    line-height: 1.5;
+    z-index: 999; /* Ensure it appears above other elements */
+}

@@ -6,11 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graph Visualizer</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
 
 </head>
 
 <body>
-    <div id="tools">
+  
+  <div id="typed-message"></div>
+  
+  <div id="tools">
         <select name="graph-type" id="graph-type">
             <option value="UUG">Undirected Unweighted Graph</option>
             <option value="DWG">Directed Weighted Graph</option>
@@ -21,7 +26,7 @@
         <button id="edgeBtn">Add Edge</button>
         <button id="bfsBtn">BFS travesal</button>
         <button id="dfsBtn">DFS travesal</button>
-        <button id="bipertiteBtn">Bipertite Graph</button>
+        <button id="bipartiteBtn">Bipertite Graph</button>
 
     </div>
     <div id="graph-container">
@@ -51,6 +56,7 @@
     <script src="BFS.js"></script>
     <script src="DFS.js"></script>
     <script src="graph-construct.js"></script>
+    <script src="BFS.js"></script>
 </body>
 
 </html>
