@@ -3,9 +3,12 @@ const vertexBtn = document.getElementById('vertexBtn');
 const edgeBtn = document.getElementById('edgeBtn');
 const bfsBtn = document.getElementById('bfsBtn');
 const graphSvg = document.getElementById('graphSvg');
+const dfsBtn = document.getElementById('dfsBtn');
+
 
 // Array to store vertices with their coordinates
 let vertices = [];
+let isBFS = false;
 let edges = [];
 let isAddingVertex = false;
 let isAddingEdge = false;
@@ -70,6 +73,7 @@ function addVertex(event) {
 }
 
 
+
 function addWeight(midX, midY) {
     var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect.setAttribute("x", `${midX - 10}`);
@@ -79,28 +83,35 @@ function addWeight(midX, midY) {
     rect.setAttribute("fill", "lightblue");
 
     // Create text element
-    var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text.setAttribute("x", midX); // Adjusted to center the text horizontally
     text.setAttribute("y", midY); // Adjusted to center the text vertically
     text.setAttribute("text-anchor", "middle");
     text.setAttribute('dominant-baseline', 'central');
     text.setAttribute("fill", "black");
+    text.setAttribute('id',`text-${edges.length}`);
+    text.textContent = 1;
+    graphSvg.appendChild(rect);
+    graphSvg.appendChild(text);
     // let's show pop up for the edge weith
     document.getElementById("edgeWeightModal").style.display = "block";
+    let edgeWeight = 1;
     document.getElementById("edgeWeightSubmit").addEventListener("click", function () {
-        var edgeWeight = document.getElementById("edgeWeightInput").value;
+        edgeWeight = document.getElementById("edgeWeightInput").value;
         if (edgeWeight) {
             console.log("Edge weight entered:", edgeWeight);
             // Add your code here to handle the edge weight
             // For example, you can close the modal after processing the weight
             document.getElementById("edgeWeightModal").style.display = "none";
-            text.textContent = edgeWeight;
+            // text.textContent = edgeWeight;
+            let textElement = document.getElementById(`text-${edges.length}`);
+            textElement.textContent = `${edgeWeight}`;
         }
     });
+    // text.textContent = edgeWeight;
 
     // Append rectangle and text elements to SVG
-    graphSvg.appendChild(rect);
-    graphSvg.appendChild(text);
+   
 }
 // Function to handle click event for adding an edge
 function addEdge(event) {
@@ -368,6 +379,12 @@ bfsBtn.addEventListener('click', () => {
     // const startingNode = vertices[0].id; // Or use the ID to access by vertex ID
 
     // bfs(graph, startingNode);
+    // isBFS = true;
     graphSvg.addEventListener('click',triggerBfs);
+    // graphSvg.removeEventListener('click',triggerBfs);
 
 });
+
+dfsBtn.addEventListener('click',()=>{
+    graphSvg.addEventListener('click',triggerDfs);
+})
