@@ -173,6 +173,8 @@ function addEdge(event) {
             }
 
             selectedVertex = null;
+
+            edge.pathElement = path;
         }
     }
 }
@@ -282,6 +284,8 @@ function addDirectedEdge(event) {
             }
 
             selectedVertex = null;
+
+            edge.pathElement = path;
         }
     }
 }
@@ -375,6 +379,8 @@ bfsBtn.addEventListener('click', () => {
     graphSvg.removeEventListener('click', addDirectedEdge);
     graphSvg.removeEventListener('click', addEdge);
     graphSvg.removeEventListener('click',triggerDfs);
+    graphSvg.removeEventListener('click',triggerCycleDetection);
+
 
     // const startingNode = vertices[0].id; // Or use the ID to access by vertex ID
 
@@ -394,4 +400,22 @@ dfsBtn.addEventListener('click', () => {
     graphSvg.removeEventListener('click', addEdge);
     graphSvg.removeEventListener('click',triggerBfs);
     graphSvg.addEventListener('click', triggerDfs);
+    graphSvg.removeEventListener('click', triggerCycleDetection);
+
 })
+
+const cycleBtn = document.getElementById('cycleBtn');
+
+cycleBtn.addEventListener('click', () => {
+    isAddingVertex = false;
+    isAddingEdge = false;
+    isPerformingBFS = false;
+    graphSvg.removeEventListener('click', addVertex);
+    graphSvg.removeEventListener('click', addDirectedEdge);
+    graphSvg.removeEventListener('click', addEdge);
+    graphSvg.removeEventListener('click',triggerBfs);
+    graphSvg.removeEventListener('click', triggerDfs);
+    // graphSvg.addEventListener('click', triggerCycleDetection);
+    triggerCycleDetection();
+});
+
