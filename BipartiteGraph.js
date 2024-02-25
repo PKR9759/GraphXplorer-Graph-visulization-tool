@@ -1,13 +1,14 @@
 const bipartiteBtn = document.getElementById("bipartiteBtn");
 
 
-
-bipartiteBtn.onclick = function () {
-    const isBipartite = checkBipartite(1);//beacuse start node is 1
+bipartiteBtn.onclick = async function () {
+    const isBipartite = await checkBipartite(1);//beacuse start node is 1
     if (isBipartite) {
         console.log("The graph is bipartite!");
+        displayTypedMessage("The graph is bipartite!");
     } else {
         console.log("The graph is not bipartite!");
+        displayTypedMessage("The graph is not bipartite!");
     }
 };
 
@@ -38,16 +39,19 @@ async function checkBipartite(startNode) {
 
     while (queue.length > 0) {
         const currentNode = queue.shift();
-        visited[currentNode] = true;
 
         // Change the color of the visited vertex
         // changeVertexColor(currentNode, 'green');
 
         for (const adjNode of graph[currentNode]) {
-            if (!visited[adjNode]) {
+            if (!vertexColors[adjNode]) {
+                visited[currentNode] = true;
                 
                 // Trigger animation for visiting an edge
+                
                 showBetterAnimation(currentNode, adjNode);
+                
+                
                 await new Promise(resolve => setTimeout(resolve, 4580));
                 // Change the color of the adjacent vertex
                 changeVertexColor(adjNode, vertexColors[currentNode] === 'red' ? 'blue' : 'red');
@@ -72,7 +76,7 @@ async function checkBipartite(startNode) {
     return true;
 }
 
-// Function to change the color of a vertex
+
 function changeVertexColor(vertexId, color) {
     const vertexElement = document.getElementById(`circle-${vertexId}`);
     if (vertexElement) {
@@ -80,7 +84,29 @@ function changeVertexColor(vertexId, color) {
     }
 }
 
-// Function to simulate asynchronous behavior using setTimeout
-// function sleep(ms) {
-//     return
-// }
+
+
+function displayTypedMessage(message) {
+    
+    const styledMessage = document.getElementById('typed-message');
+    styledMessage.style.display = 'block';
+
+    // Create a new Typed instance
+    const typed = new Typed('#typed-message', {
+        strings: [message],
+        typeSpeed: 50,
+        backSpeed: 25,
+        showCursor: true,
+        cursorChar: '|',
+        onComplete: function() {
+            setTimeout(() => {
+                styledMessage.style.display = 'none';
+                typed.destroy();
+            }, 1200);
+            // Remove the typed instance after completion
+            
+            
+            
+        }
+    });
+}
