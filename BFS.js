@@ -20,7 +20,7 @@ function formatSVG() {
     }
 }
 
-function showBetterAnimation(currentNode, adjNode) {
+function showAnimation(currentNode, adjNode) {
     let edgeId;
     let currEdge = null;
     for (let edge of edges) {
@@ -89,6 +89,7 @@ function showBetterAnimation(currentNode, adjNode) {
                 graphSvg.removeChild(overlayLine);
                 let adjNodeElement = document.getElementById(`circle-${adjNode}`)
                 adjNodeElement.setAttribute('fill', 'green');
+
             }
         }
 
@@ -100,7 +101,8 @@ function showBetterAnimation(currentNode, adjNode) {
 
 
 async function bfs(graph, startNode) {
-
+    if(isBFS) return;
+    isBFS = true;
     formatSVG();
 
     let node = document.getElementById(`circle-${startNode}`);
@@ -121,7 +123,7 @@ async function bfs(graph, startNode) {
             if (!visited.includes(adjNode)) {
 
                 // showAnimation(currentNode, adjNode);
-                showBetterAnimation(currentNode, adjNode);
+                showAnimation(currentNode, adjNode);
                 await new Promise(resolve => setTimeout(resolve, 5000));
                 // Mark the edge as visited
 
@@ -132,6 +134,7 @@ async function bfs(graph, startNode) {
             }
         }
 
+        isBFS = false;
 
     }
 }
