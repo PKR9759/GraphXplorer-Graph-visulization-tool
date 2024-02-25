@@ -39,7 +39,7 @@ Contributions are welcome! If you have any ideas, enhancements, or bug fixes, pl
 
 ## Deployment
 
- clik here for vizualize graph : https://pkr9759.github.io/GraphXplorer-Graph-visulization-tool/ 
+ clik here for visualize graph : https://pkr9759.github.io/GraphXplorer-Graph-visulization-tool/ 
 
 
 
