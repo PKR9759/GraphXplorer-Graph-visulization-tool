@@ -49,7 +49,7 @@ async function checkBipartite(startNode) {
                 
                 // Trigger animation for visiting an edge
                 
-                showBetterAnimation(currentNode, adjNode);
+                showAnimation(currentNode, adjNode);
                 
                 
                 await new Promise(resolve => setTimeout(resolve, 4580));
