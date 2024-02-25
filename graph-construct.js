@@ -4,9 +4,13 @@ const edgeBtn = document.getElementById('edgeBtn');
 const bfsBtn = document.getElementById('bfsBtn');
 const graphSvg = document.getElementById('graphSvg');
 const dfsBtn = document.getElementById('dfsBtn');
+const mBox = document.getElementById('message-box');
+
+const message = document.getElementById("message");
 
 
 // Array to store vertices with their coordinates
+let isFirstVertex = true;
 let vertices = [];
 let isBFS = false;
 let edges = [];
@@ -117,6 +121,16 @@ function addWeight(midX, midY) {
 function addEdge(event) {
     if (!isAddingEdge) return;
 
+    if (!selectedVertex) {
+        mBox.style.display = "block";
+        message.innerHTML = "Please select second vertex";
+        isFirstVertex = false;
+    }else{
+        mBox.style.display = "block";
+        message.innerHTML = "Please select first vertex";
+        isFirstVertex = true;
+    }
+
     const svgRect = graphSvg.getBoundingClientRect();
     const xPos = event.clientX - svgRect.left;
     const yPos = event.clientY - svgRect.top;
@@ -135,7 +149,6 @@ function addEdge(event) {
         if (!selectedVertex) {
             selectedVertex = closestVertex;
         } else if (selectedVertex !== closestVertex) {
-
             const edge = {
                 start: selectedVertex,
                 end: closestVertex,
@@ -304,7 +317,7 @@ graphTypeSelect.addEventListener("change", function (event) {
             uwg = false;
             uug = false;
             console.log("Directed Weighted Graph selected");
-            
+
             break;
         case "DUG":
             dwg = false;
@@ -313,7 +326,7 @@ graphTypeSelect.addEventListener("change", function (event) {
             uug = false;
             // Directed Unweighted Graph
             console.log("Directed Unweighted Graph selected");
-           
+
             break;
         case "UWG":
             // Undirected Weighted Graph
@@ -322,7 +335,7 @@ graphTypeSelect.addEventListener("change", function (event) {
             uwg = true;
             uug = false;
             console.log("Undirected Weighted Graph selected");
-            
+
             break;
         case "UUG":
             // Undirected Unweighted Graph
@@ -337,9 +350,9 @@ graphTypeSelect.addEventListener("change", function (event) {
     }
 });
 
-
-
 vertexBtn.addEventListener('click', () => {
+    mBox.style.display = "block";
+    message.innerHTML = "Please click on the below box";
     isAddingVertex = true;
     isAddingEdge = false;
     isPerformingBFS = false;
@@ -352,6 +365,10 @@ edgeBtn.addEventListener('click', () => {
     isAddingEdge = true;
     isAddingVertex = false;
     isPerformingBFS = false;
+
+    // mBox.style.display = "block";
+    message.innerHTML = "Please select first vertex";
+
     graphSvg.removeEventListener('click', addVertex);
     if (uug) {
         graphSvg.addEventListener('click', addEdge);
@@ -374,8 +391,8 @@ bfsBtn.addEventListener('click', () => {
     graphSvg.removeEventListener('click', addVertex);
     graphSvg.removeEventListener('click', addDirectedEdge);
     graphSvg.removeEventListener('click', addEdge);
-    graphSvg.removeEventListener('click',triggerDfs);
-
+    graphSvg.removeEventListener('click', triggerDfs);
+    message.innerHTML = "Please select starting vertex from where you want to start BFS : ";
     // const startingNode = vertices[0].id; // Or use the ID to access by vertex ID
 
     // bfs(graph, startingNode);
@@ -392,6 +409,8 @@ dfsBtn.addEventListener('click', () => {
     graphSvg.removeEventListener('click', addVertex);
     graphSvg.removeEventListener('click', addDirectedEdge);
     graphSvg.removeEventListener('click', addEdge);
-    graphSvg.removeEventListener('click',triggerBfs);
+    graphSvg.removeEventListener('click', triggerBfs);
     graphSvg.addEventListener('click', triggerDfs);
+    message.innerHTML = "Please select starting vertex from where you want to start DFS : ";
+
 })

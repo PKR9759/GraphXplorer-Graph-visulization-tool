@@ -96,3 +96,11 @@ text,circle{
     line-height: 1.5;
     z-index: 999; /* Ensure it appears above other elements */
 }
+
+#message-box{
+    display: none;
+    border: 1px solid black;
+    margin: 1px;
+    padding: 2px;
+    text-align: center;
+}
